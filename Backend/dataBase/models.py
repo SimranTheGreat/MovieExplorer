@@ -1,8 +1,12 @@
+
 from sqlalchemy import Column, Integer, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
-from .db import Base
+from dataBase.db import Base
 
-# --- Association Tables ---
+
+# =========================
+# Association Tables
+# =========================
 
 movie_actor = Table(
     "movie_actor",
@@ -18,7 +22,10 @@ movie_genre = Table(
     Column("genre_id", ForeignKey("genres.id"), primary_key=True),
 )
 
-# --- Core Tables ---
+
+# =========================
+# Core Tables
+# =========================
 
 class Director(Base):
     __tablename__ = "directors"
@@ -38,7 +45,7 @@ class Actor(Base):
     movies = relationship(
         "Movie",
         secondary=movie_actor,
-        back_populates="actors",
+        back_populates="actors"
     )
 
 
@@ -51,7 +58,7 @@ class Genre(Base):
     movies = relationship(
         "Movie",
         secondary=movie_genre,
-        back_populates="genres",
+        back_populates="genres"
     )
 
 
@@ -62,6 +69,9 @@ class Movie(Base):
     title = Column(String, nullable=False)
     release_year = Column(Integer, nullable=False)
 
+    image_link = Column(String, nullable=True)
+    video_link = Column(String, nullable=True)
+
     director_id = Column(Integer, ForeignKey("directors.id"))
 
     director = relationship("Director", back_populates="movies")
@@ -69,11 +79,11 @@ class Movie(Base):
     actors = relationship(
         "Actor",
         secondary=movie_actor,
-        back_populates="movies",
+        back_populates="movies"
     )
 
     genres = relationship(
         "Genre",
         secondary=movie_genre,
-        back_populates="movies",
+        back_populates="movies"
     )
