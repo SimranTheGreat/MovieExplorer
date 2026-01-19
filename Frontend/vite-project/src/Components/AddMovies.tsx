@@ -18,17 +18,16 @@ export default function AddMovies() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-   
-
-    const payload = {
-  title: form.title,
-  release_year: Number(form.release_year),
-  image_link: form.image_link || null,
-  video_link: form.video_link || null,
-  director_name: form.director,
-  actor_names: form.actors.split(",").map(a => a.trim()),
-  genre_names: form.genres.split(",").map(g => g.trim()),
-};
+ 
+ const payload = {
+    title: form.title,
+    release_year: Number(form.release_year),
+    director_name: form.director,
+    actor_names: form.actors.split(",").map(a => a.trim()),
+    genre_names: form.genres.split(",").map(g => g.trim()),
+    image_link: form.image_link || null,
+    video_link: form.video_link || null,
+  };
 
     await fetch("http://127.0.0.1:8000/movies", {
       method: "POST",

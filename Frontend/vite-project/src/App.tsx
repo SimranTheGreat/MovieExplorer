@@ -6,22 +6,21 @@ import AddMovies from "./Components/AddMovies";
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        {/* Root redirect */}
-        <Route path="/" element={<Navigate to="/home" replace />} />
+  <Routes>
+    {/* Root redirect */}
+    <Route path="/" element={<Navigate to="/home" replace />} />
 
-        {/* Layout route */}
-        <Route path="/home" element={<HomePage />}>
-          
-          {/* Default page = Movies */}
-          <Route index element={<Navigate to="movies" replace />} />
+    {/* Layout route */}
+    <Route path="/home" element={<HomePage />}>
+      {/* Default page */}
+      <Route index element={<Navigate to="movies" replace />} />
 
-          {/* Child routes */}
-          <Route path="movies" element={<Movies />} />
-          <Route path="addMovies" element={<AddMovies />} />
+      {/* ✅ RELATIVE paths */}
+      <Route path="movies" element={<Movies />} />
+      <Route path="addMovies" element={<AddMovies />} />
+    </Route>
+  </Routes>
+</BrowserRouter>
 
-        </Route>
-      </Routes>
-    </BrowserRouter>
   );
 }

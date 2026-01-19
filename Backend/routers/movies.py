@@ -4,9 +4,12 @@ from schemas.movie import MovieCreate
 from dataBase.db import SessionLocal
 from dataBase import models
 
-
 router = APIRouter(prefix="/movies", tags=["Movies"])
 
+
+# --------------------
+# DB Dependency
+# --------------------
 def get_db():
     db = SessionLocal()
     try:
@@ -15,6 +18,9 @@ def get_db():
         db.close()
 
 
+# --------------------
+# Helper functions
+# --------------------
 def get_or_create_director(db: Session, name: str):
     director = db.query(models.Director).filter_by(name=name).first()
     if not director:
@@ -45,6 +51,9 @@ def get_or_create_genre(db: Session, name: str):
     return genre
 
 
+# --------------------
+# CREATE MOVIE
+# --------------------
 @router.post("")
 def create_movie(payload: MovieCreate, db: Session = Depends(get_db)):
     director = get_or_create_director(db, payload.director_name)
@@ -68,3 +77,11 @@ def create_movie(payload: MovieCreate, db: Session = Depends(get_db)):
     db.refresh(movie)
 
     return movie
+
+
+# --------------------
+# GET ALL MOVIES (THIS WAS MISSING)
+# --------------------
+@router.get("")
+def get_movies(db: Session = Depends(get_db)):
+    return db.query(models.Movie).all()
