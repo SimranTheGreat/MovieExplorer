@@ -39,7 +39,7 @@ export default function Movies() {
       <h1 className="text-2xl font-semibold mb-6">Movies</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {movies.map(movie => (
+        {movies.map((movie) => (
           <div
             key={movie.id}
             className="rounded-lg border bg-white shadow-sm overflow-hidden"
@@ -60,8 +60,7 @@ export default function Movies() {
               </p>
 
               <p className="text-sm">
-                <strong>Director ID:</strong>{" "}
-                {movie.director_id ?? "—"}
+                <strong>Director ID:</strong> {movie.director_id ?? "—"}
               </p>
 
               {movie.video_link && (
