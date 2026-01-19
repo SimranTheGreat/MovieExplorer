@@ -1,9 +1,13 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
+from typing import List
+
 from dataBase.db import SessionLocal
 from dataBase import models
+from schemas.genre import GenreOut
 
 router = APIRouter(prefix="/genres", tags=["Genres"])
+
 
 def get_db():
     db = SessionLocal()
@@ -11,6 +15,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
 @router.post("")
 def create_genre(name: str, db: Session = Depends(get_db)):
@@ -20,6 +25,11 @@ def create_genre(name: str, db: Session = Depends(get_db)):
     db.refresh(genre)
     return genre
 
-@router.get("")
+
+@router.get("", response_model=List[GenreOut])
 def get_genres(db: Session = Depends(get_db)):
-    return db.query(models.Genre).all()
+    return (
+        db.query(models.Genre)
+        .options(joinedload(models.Genre.movies))
+        .all()
+    )

@@ -1,9 +1,13 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
+from typing import List
+
 from dataBase.db import SessionLocal
 from dataBase import models
+from schemas.actor import ActorOut
 
 router = APIRouter(prefix="/actors", tags=["Actors"])
+
 
 def get_db():
     db = SessionLocal()
@@ -11,6 +15,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
 @router.post("")
 def create_actor(name: str, db: Session = Depends(get_db)):
@@ -20,6 +25,11 @@ def create_actor(name: str, db: Session = Depends(get_db)):
     db.refresh(actor)
     return actor
 
-@router.get("")
+
+@router.get("", response_model=List[ActorOut])
 def get_actors(db: Session = Depends(get_db)):
-    return db.query(models.Actor).all()
+    return (
+        db.query(models.Actor)
+        .options(joinedload(models.Actor.movies))
+        .all()
+    )
